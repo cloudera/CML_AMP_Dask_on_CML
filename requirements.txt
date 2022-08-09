@@ -1,0 +1,11 @@
+dask[complete]==2022.5.1
+dask-ml==2022.1.22
+matplotlib==3.3.4
+numpy==1.22.4
+pandas==1.4.2
+scikit-learn==1.0.2
+scipy==1.8.1
+seaborn==0.11.2
+tqdm==4.64.0
+xgboost==1.6.1
+-e .
