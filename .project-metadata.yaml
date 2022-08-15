@@ -1,0 +1,21 @@
+name: Distributed XGBoost with Dask on CML
+description: >-
+    Demonstrates a typical data science workflow for developing a credit card fraud
+    application including how to train a distributed XGBoost model using Dask on CML workers.
+author: Cloudera Inc.
+specification_version: 1.0
+prototype_version: 1.0
+date: "2022-07-30"
+
+runtimes:
+  - editor: JupyterLab
+    kernel: Python 3.9
+    edition: Standard
+
+tasks:
+  - type: run_session
+    name: Install Dependencies
+    script: scripts/install_dependencies.py
+    memory: 2
+    cpu: 1
+
