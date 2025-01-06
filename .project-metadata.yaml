@@ -13,9 +13,22 @@ runtimes:
     edition: Standard
 
 tasks:
-  - type: run_session
+  - type: create_job
     name: Install Dependencies
+    entity_label: install_deps
     script: scripts/install_dependencies.py
-    memory: 2
+    arguments: None
     cpu: 1
+    memory: 2
+    short_summary: Create job to install project dependencies.
+    environment:
+      TASK_TYPE: CREATE/RUN_JOB
+
+  - type: run_job
+    entity_label: install_deps
+    short_summary: Running install dependencies job.
+    long_summary: >-
+      Running the job to install dependencies.
+
+
 

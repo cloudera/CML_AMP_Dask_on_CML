@@ -39,7 +39,7 @@
 # ###########################################################################
 
 import os
-import cdsw
+import cml.workers_v1 as workers_v1
 
 # This default may not work in some envs - change to whatever is appropriate 
 DASHBOARD_PORT = os.environ['CDSW_READONLY_PORT']
@@ -52,13 +52,13 @@ def run_scheduler(dashboard_port, num_workers=1, cpu=1, memory=2):
     scheduler_code = f"""!dask-scheduler \
         --host 0.0.0.0 \
         --dashboard-address 127.0.0.1:{dashboard_port}""" 
-    dask_scheduler = cdsw.launch_workers(
+    dask_scheduler = workers_v1.launch_workers(
         n=num_workers,
         cpu=cpu,
         memory=memory,
         code=scheduler_code,
     )
-    scheduler_details = cdsw.await_workers(
+    scheduler_details = workers_v1.await_workers(
       dask_scheduler, 
       wait_for_completion=False, 
       timeout_seconds=90
@@ -74,7 +74,7 @@ def get_scheduler_url(dask_scheduler):
     Given a Dask Scheduler, identify its TCP url so Dask Workers can 
     communicate with it. 
     """
-    scheduler_workers = cdsw.list_workers()
+    scheduler_workers = workers_v1.list_workers()
     scheduler_id = dask_scheduler[0]["id"]
     scheduler_ip = [
         worker["ip_address"] for worker in scheduler_workers if worker["id"] == scheduler_id
@@ -94,7 +94,7 @@ def run_dask_workers(scheduler_url, num_workers, cpu, memory, nvidia_gpu=0):
     Assumes that the Dask Scheduler is running and available via 
     the scheduler_url.
     """
-    workers = cdsw.launch_workers(
+    workers = workers_v1.launch_workers(
             n=num_workers, 
             cpu=cpu, 
             memory=memory, 
@@ -102,7 +102,7 @@ def run_dask_workers(scheduler_url, num_workers, cpu, memory, nvidia_gpu=0):
             code=f"!dask-worker {scheduler_url}"
           )
 
-    worker_details = cdsw.await_workers(workers, wait_for_completion=False)
+    worker_details = workers_v1.await_workers(workers, wait_for_completion=False)
     if worker_details['failures']:
         raise RuntimeError("dask worker nodes failed to launch.")
         print(worker_details['failures'])
